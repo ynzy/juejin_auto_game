@@ -1,6 +1,6 @@
 const got = require('got')
 
-const { cookie, aid, uuid, _signature, PUSH_PLUS_TOKEN, DING_TALK_TOKEN, uid, username } = require('./config')
+const { cookie, aid, uuid, _signature, PUSH_PLUS_TOKEN, DING_TALK_TOKEN, uid } = require('./config')
 
 const BASEURL = 'https://api.juejin.cn/growth_api/v1/check_in' // 掘金签到api
 const PUSH_URL = 'http://www.pushplus.plus/send' // pushplus 推送api
@@ -8,6 +8,7 @@ const DINGTALK_PUSH_URL = "https://oapi.dingtalk.com/robot/send?access_token=" +
 
 const URL = `${BASEURL}?aid=${aid}&uuid=${uuid}&_signature=${_signature}`
 const DRAW_URL = `https://api.juejin.cn/growth_api/v1/lottery/draw?aid=${aid}&uuid=${uuid}&_signature=${_signature}`
+const LUCKY_URL = `https://api.juejin.cn/growth_api/v1/lottery_lucky/dip_lucky?aid=${aid}&uuid=${uuid}`
 
 const HEADERS = {
   cookie,
@@ -30,6 +31,7 @@ async function signIn () {
   })
   console.log(res.body)
   draw()
+  lucky()
   if (!PUSH_PLUS_TOKEN && !DING_TALK_TOKEN) return;
 
   if(typeof res.body == "string") res.body = JSON.parse(res.body);
@@ -39,6 +41,22 @@ async function signIn () {
 
 async function draw () {
   const res = await got.post(DRAW_URL, {
+    hooks: {
+      beforeRequest: [
+        options => {
+          Object.assign(options.headers, HEADERS)
+        }
+      ]
+    }
+  })
+  console.log(res.body)
+}
+
+/**
+ * @desc 沾喜气
+ */
+async function lucky () {
+  const res = await got.post(LUCKY_URL, {
     hooks: {
       beforeRequest: [
         options => {
