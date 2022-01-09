@@ -40,7 +40,7 @@ async function signIn () {
       ]
     }
   })
-  if (drawData.body.data.free_count > 0) draw(); // 免费次数大于0时再抽
+  if (JSON.parse(drawData.body).data.free_count > 0) draw(); // 免费次数大于0时再抽
   lucky()
   if (!PUSH_PLUS_TOKEN && !DING_TALK_TOKEN) return;
 
