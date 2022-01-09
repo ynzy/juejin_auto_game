@@ -17,7 +17,7 @@ const { Game } = require("./Game");
 function ArrayOneToTwo(arr, num) {
     let arrList = [];
     arr.map((item, index) => {
-        if (index % 6 == 0) {
+        if (index % num == 0) {
             arrList.push([item]);
         } else {
             arrList[arrList.length - 1].push(item);
