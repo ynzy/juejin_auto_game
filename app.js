@@ -38,6 +38,8 @@ async function signIn () {
   if(typeof res.body == "string") res.body = JSON.parse(res.body);
   const msg = res.body.err_no == 0 ? `成功，获得${res.body.data.incr_point}个矿石，矿石总数：${res.body.data.sum_point}个。` : "失败，" + res.body.err_msg;
   handlePush(msg);
+
+  if (!uid) return;
   autoGame();
 }
 
