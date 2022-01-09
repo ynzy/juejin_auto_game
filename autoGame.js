@@ -6,7 +6,7 @@ const NAGETIVE_DIRECTION = {
 };
 const COLUMN = 6;
 const OBSTACLE = 6;
-const { cookie, uid } = require("./configs");
+const { cookie, uid } = require("./config");
 const { Game } = require("./Game");
 
 /**
