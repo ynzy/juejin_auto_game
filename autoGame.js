@@ -83,4 +83,4 @@ const autoGame = async () => {
     });
 };
 
-autoGame();
+exports.autoGame = autoGame;
