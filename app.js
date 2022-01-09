@@ -42,12 +42,11 @@ async function signIn () {
   })
   if (JSON.parse(drawData.body).data.free_count > 0) draw(); // 免费次数大于0时再抽
   lucky()
-  if (!PUSH_PLUS_TOKEN && !DING_TALK_TOKEN) return;
-
-  if(typeof res.body == "string") res.body = JSON.parse(res.body);
-  const msg = res.body.err_no == 0 ? `成功，获得${res.body.data.incr_point}个矿石，矿石总数：${res.body.data.sum_point}个。` : "失败，" + res.body.err_msg;
-  handlePush(msg);
-
+  if (PUSH_PLUS_TOKEN || DING_TALK_TOKEN) {
+    if(typeof res.body == "string") res.body = JSON.parse(res.body);
+    const msg = res.body.err_no == 0 ? `成功，获得${res.body.data.incr_point}个矿石，矿石总数：${res.body.data.sum_point}个。` : "失败，" + res.body.err_msg;
+    handlePush(msg);
+  }
   if (!uid) return;
   autoGame();
 }
