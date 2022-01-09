@@ -10,6 +10,7 @@ const DINGTALK_PUSH_URL = "https://oapi.dingtalk.com/robot/send?access_token=" +
 const URL = `${BASEURL}?aid=${aid}&uuid=${uuid}&_signature=${_signature}`
 const DRAW_URL = `https://api.juejin.cn/growth_api/v1/lottery/draw?aid=${aid}&uuid=${uuid}&_signature=${_signature}`
 const LUCKY_URL = `https://api.juejin.cn/growth_api/v1/lottery_lucky/dip_lucky?aid=${aid}&uuid=${uuid}`
+const DRAW_CHECK_URL = `https://api.juejin.cn/growth_api/v1/lottery_config/get?aid=${aid}&uuid=${uuid}`
 
 const HEADERS = {
   cookie,
@@ -30,8 +31,16 @@ async function signIn () {
       ]
     }
   })
-  console.log(res.body)
-  draw()
+  const drawData = await got.get(DRAW_CHECK_URL, {
+    hooks: {
+      beforeRequest: [
+        options => {
+          Object.assign(options.headers, HEADERS)
+        }
+      ]
+    }
+  })
+  if (drawData.body.data.free_count > 0) draw(); // 免费次数大于0时再抽
   lucky()
   if (!PUSH_PLUS_TOKEN && !DING_TALK_TOKEN) return;
 
