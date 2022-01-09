@@ -52,7 +52,10 @@ const getTarck = (maps) => {
     return trackList;
 };
 
+let runNum = 0;
 const autoGame = async () => {
+    runNum++;
+    if (runNum > 500) return ; // 防止死循环
     let exp = new Game(uid, cookie);
     let gameData = await exp.openGame();
     console.log(gameData !== undefined ? "Game Start🎮" : "Game Start Error❌");
