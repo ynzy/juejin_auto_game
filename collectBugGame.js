@@ -114,6 +114,8 @@ const handleBugfix = async ({ competition_id, bug_fix_num, not_self }) => {
 const collectBugGame = async () => {
     const notCollectList = await get_not_collect()
     // console.log(notCollectList);
+    // 防止死循环
+    if (!notCollectList.length) return Promise.resolve()
     const collectRes = notCollectList.map((bug) => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -121,8 +123,11 @@ const collectBugGame = async () => {
             }, 1000);
         })
     })
-    await Promise.all(collectRes)
     console.log('收集完了');
+    return await Promise.all(collectRes)
+}
+
+const handleBugfixGame = async () => {
     const bugfixRes = await getbugfix_competition()
     const competition_id = bugfixRes.competition_id
     // console.log(bugfixRes);
@@ -141,5 +146,9 @@ const collectBugGame = async () => {
         handleBugfix({ competition_id, bug_fix_num: bugfixUser.user_own_bug, not_self: 0 })
     }
 }
-// collectBugGame()
+
+const bugGames = async () => {
+    await collectBugGame()
+    handleBugfixGame()
+}
 exports.collectBugGame = collectBugGame;
