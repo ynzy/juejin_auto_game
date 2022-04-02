@@ -151,4 +151,5 @@ const bugGames = async () => {
     await collectBugGame()
     handleBugfixGame()
 }
-exports.collectBugGame = collectBugGame;
+// bugGames()
+exports.bugGames = bugGames;

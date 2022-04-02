@@ -1,6 +1,6 @@
 const got = require('got')
 const { autoGame } = require('./autoGame')
-const { collectBugGame } = require('./collectBugGame')
+const { bugGames } = require('./collectBugGame')
 
 const { cookie, aid, uuid, _signature, PUSH_PLUS_TOKEN, DING_TALK_TOKEN, uid } = require('./config')
 
@@ -52,7 +52,7 @@ async function signIn() {
   autoGame((msg) => {
     handlePush(msg, 1);
   });
-  collectBugGame()
+  bugGames()
 }
 
 async function draw() {
