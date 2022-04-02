@@ -53,9 +53,9 @@ const getTarck = (maps) => {
 };
 
 let runNum = 0;
-const autoGame = async () => {
+const autoGame = async (callback) => {
     runNum++;
-    if (runNum > 500) return ; // 防止死循环
+    if (runNum > 500) return; // 防止死循环
     let exp = new Game(uid, cookie);
     let gameData = await exp.openGame();
     console.log(gameData !== undefined ? "Game Start🎮" : "Game Start Error❌");
@@ -66,10 +66,9 @@ const autoGame = async () => {
     exp.move(track).then(() => {
         exp.outGame().then(async (res) => {
             res.body = JSON.parse(res.body);
-            console.log(
-                `Game over, Reward: ${res.body.data.realDiamond}, Today reward: ${res.body.data.todayDiamond}, Today limit reward: ${res.body.data.todayLimitDiamond}`
-            );
-    
+            const msg = `Game over, Reward: ${res.body.data.realDiamond}, Today reward: ${res.body.data.todayDiamond}, Today limit reward: ${res.body.data.todayLimitDiamond}`;
+            console.log(msg);
+
             if (res.body.data.realDiamond < 40) {
                 // 奖励小于40刷新下地图
                 await exp.freshMap();
@@ -81,9 +80,10 @@ const autoGame = async () => {
                 }, 1000);
             } else {
                 console.log("今日奖励已达上限！");
+                callback && callback(msg);
             }
         });
     });
 };
-
+// autoGame()
 exports.autoGame = autoGame;
