@@ -47,7 +47,6 @@ const collect = async ({ bug_type, bug_time }) => {
             beforeRequest: [
                 options => {
                     Object.assign(options.headers, HEADERS)
-
                 }
             ]
         },
